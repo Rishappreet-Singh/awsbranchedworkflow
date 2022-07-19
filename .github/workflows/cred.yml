@@ -33,10 +33,10 @@ jobs:
             #echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.AWS_ACCESS_KEY_ID}}"
             #echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.AWS_SECRET_ACCESS_KEY}}"
           fi         
-          
+        
     outputs:
-      AWS_ACCESS_KEY_ID: ${{steps.branch_checker.ouputs.AWS_ACCESS_KEY_ID}}
-      AWS_SECRET_ACCESS_KEY: ${{steps.branch_checker.ouputs.AWS_SECRET_ACCESS_KEY}}
+      AWS_ACCESS_KEY_ID: ${{steps.branch_checker.outputs.AWS_ACCESS_KEY_ID}}
+      AWS_SECRET_ACCESS_KEY: ${{steps.branch_checker.outputs.AWS_SECRET_ACCESS_KEY}}
     
   Creating_resources:
     name: 'resources'
