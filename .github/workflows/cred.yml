@@ -1,0 +1,45 @@
+name: 'Creds'
+
+on:
+  push:
+    branches:
+    - "production_branch"
+    - "dev-branch"  
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.PRODUNCTION_AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUNCTION_AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: "ap-southeast-1"    
+  
+jobs:
+  Creating_resources:
+    name: 'Login'
+    runs-on: ubuntu-latest
+    environment: production
+    if: github.ref == 'refs/heads/production_branch'
+    env:
+        AWS_ACCESS_KEY_ID: 'Hello_dev_access_key'
+        AWS_SECRET_ACCESS_KEY: 'Hello_dev_secret_key'
+#       AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY }}
+#       AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
+  
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    - name: Echoing
+      run: |
+        echo AWS_ACCESS_KEY_ID
+        echo AWS_SECRET_ACCESS_KEY
+#     - name: Terraform Init
+#       run: terraform init
+
+#     - name: Terraform Plan
+#       run: terraform plan -input=false
+
+#     - name: Terraform Apply
+#       run: terraform apply -auto-approve -input=false
