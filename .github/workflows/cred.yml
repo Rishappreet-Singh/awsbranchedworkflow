@@ -4,7 +4,7 @@ on:
   push:
     branches:
     - "production_branch"
-    - "dev-branch"  
+    - "dev_branch"  
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.PRODUNCTION_AWS_ACCESS_KEY_ID }}
