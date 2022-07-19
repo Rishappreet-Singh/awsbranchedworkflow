@@ -6,30 +6,61 @@ on:
     - "production_branch"
     - "dev_branch"  
 
-env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.PRODUNCTION_AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUNCTION_AWS_SECRET_ACCESS_KEY }}
-  AWS_REGION: "ap-southeast-1"    
+# env:
+#   AWS_ACCESS_KEY_ID: ${{ secrets.PRODUNCTION_AWS_ACCESS_KEY_ID }}
+#   AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUNCTION_AWS_SECRET_ACCESS_KEY }}
+#   AWS_ACCESS_KEY_ID: 'Hello_production_access_key'
+#   AWS_SECRET_ACCESS_KEY: 'Hello_production_secret_key'
+#   AWS_REGION: "ap-southeast-1"    
   
 jobs:
-  Creating_resources:
-    name: 'Login'
+  Enviro: 
+    name: 'Environement variable'
     runs-on: ubuntu-latest
     environment: production
+    steps:
+      - name: checking branch
+        id: branch_checker
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/production_branch" ]; then
+            echo "::set-output name=AWS_ACCESS_KEY_ID::Hello_production_access_key"
+            echo "::set-output name=AWS_SECRET_ACCESS_KEY::Hello_production_secret_key"
+            #echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.AWS_ACCESS_KEY_ID}}"
+            #echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.AWS_SECRET_ACCESS_KEY}}"
+          else
+            echo "::set-output name=AWS_ACCESS_KEY_ID::Hello_dev_access_key"
+            echo "::set-output name=AWS_SECRET_ACCESS_KEY::Hello_dev_secret_key"
+            #echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.AWS_ACCESS_KEY_ID}}"
+            #echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.AWS_SECRET_ACCESS_KEY}}"
+          fi         
+        
+    outputs:
+      AWS_ACCESS_KEY_ID: ${{steps.branch_checker.outputs.AWS_ACCESS_KEY_ID}}
+      AWS_SECRET_ACCESS_KEY: ${{steps.branch_checker.outputs.AWS_SECRET_ACCESS_KEY}}
+    
+  Creating_resources:
+    name: 'resources'
+    runs-on: ubuntu-latest
+    environment: production
+    needs: [Enviro]
+    env: 
+      AWS_ACCESS_KEY_ID: ${{needs.Enviro.outputs.AWS_ACCESS_KEY_ID}}
+      AWS_SECRET_ACCESS_KEY: ${{needs.Enviro.outputs.AWS_SECRET_ACCESS_KEY}}
+      AWS_REGION: "ap-southeast-1"
 #       AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY }}
 #       AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
-  
+    
     defaults:
       run:
         shell: bash
 
     steps:
-    - name: program
-      if: github.ref == 'refs/heads/dev_branch'
-      env:
-        AWS_ACCESS_KEY_ID: 'Hello_dev_access_key'
-        AWS_SECRET_ACCESS_KEY: 'Hello_dev_secret_key'
-      run: echo "dev"
+#     - name: program
+#       if: github.ref == 'refs/heads/dev_branch'
+#       env:
+#         AWS_ACCESS_KEY_ID: 'Hello_dev_access_key'
+#         AWS_SECRET_ACCESS_KEY: 'Hello_dev_secret_key'
+#       run: echo "dev"
     
     - name: Checkout
       uses: actions/checkout@v3
