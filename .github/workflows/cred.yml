@@ -16,7 +16,7 @@ jobs:
     name: 'Login'
     runs-on: ubuntu-latest
     environment: production
-    if: github.ref == 'refs/heads/production_branch'
+    if: github.ref == 'refs/heads/dev_branch'
     env:
         AWS_ACCESS_KEY_ID: 'Hello_dev_access_key'
         AWS_SECRET_ACCESS_KEY: 'Hello_dev_secret_key'
