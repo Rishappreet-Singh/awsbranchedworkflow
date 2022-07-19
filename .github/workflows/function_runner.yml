@@ -60,7 +60,7 @@ jobs:
 #       run: aws aws lambda invoke --function-name ${{github.event.inputs.func_name}} --log-type outputfile.txt
 
       - name: echo
-        run: ${{github.event.inputs.func_name}} 
+        run: echo ${{github.event.inputs.func_name}} 
         
         
       
