@@ -29,6 +29,7 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: 'Hello_dev_access_key'
         AWS_SECRET_ACCESS_KEY: 'Hello_dev_secret_key'
+      run: echo "dev"
     
     - name: Checkout
       uses: actions/checkout@v3
