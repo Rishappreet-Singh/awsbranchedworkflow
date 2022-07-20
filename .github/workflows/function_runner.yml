@@ -18,16 +18,18 @@ jobs:
         id: branch_checker
         run: |
           if [ "${{ github.ref }}" = "refs/heads/production_branch" ]; then
-            echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.PRODUCTION_AWS_ACCESS_KEY_ID}}"
-            echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY}}"
+            #echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.PRODUCTION_AWS_ACCESS_KEY_ID}}"
+            #echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY}}"
+            echo "::set-output name=AWS_ACCESS_KEY_ID::Hello"
+            echo "::set-output name=AWS_SECRET_ACCESS_KEY::World"
           else
             echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.DEV_AWS_ACCESS_KEY_ID}}"
             echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.DEV_AWS_SECRET_ACCESS_KEY}}"
           fi         
         
-#     outputs:
-#       AWS_ACCESS_KEY_ID: ${{steps.branch_checker.outputs.AWS_ACCESS_KEY_ID}}
-#       AWS_SECRET_ACCESS_KEY: ${{steps.branch_checker.outputs.AWS_SECRET_ACCESS_KEY}}
+    outputs:
+      AWS_ACCESS_KEY_ID: ${{steps.branch_checker.outputs.AWS_ACCESS_KEY_ID}}
+      AWS_SECRET_ACCESS_KEY: ${{steps.branch_checker.outputs.AWS_SECRET_ACCESS_KEY}}
     
   Creating_resources:
     name: 'resources'
@@ -35,8 +37,8 @@ jobs:
     environment: production
     needs: [Enviro]
     env: 
-      AWS_ACCESS_KEY_ID: ${{needs.Enviro.steps.branch_checker.outputs.AWS_ACCESS_KEY_ID}}
-      AWS_SECRET_ACCESS_KEY: ${{needs.Enviro.steps.branch_checker.outputs.AWS_SECRET_ACCESS_KEY}}
+      AWS_ACCESS_KEY_ID: ${{needs.Enviro.outputs.AWS_ACCESS_KEY_ID}}
+      AWS_SECRET_ACCESS_KEY: ${{needs.Enviro.outputs.AWS_SECRET_ACCESS_KEY}}
       AWS_REGION: "ap-southeast-1"
   
     defaults:
