@@ -18,15 +18,18 @@ jobs:
         id: branch_checker
         run: |
           if [ "${{ github.ref }}" = "refs/heads/production_branch" ]; then
-            #echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.PRODUCTION_AWS_ACCESS_KEY_ID}}"
+            echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.PRODUCTION_AWS_ACCESS_KEY_ID}}"
             #echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY}}"
-            echo "::set-output name=AWS_ACCESS_KEY_ID::Hello"
+            #echo "::set-output name=AWS_ACCESS_KEY_ID::Hello"
             echo "::set-output name=AWS_SECRET_ACCESS_KEY::World"
           else
             echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.DEV_AWS_ACCESS_KEY_ID}}"
             echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.DEV_AWS_SECRET_ACCESS_KEY}}"
           fi         
-        
+      - name: echoing
+        run: |
+          echo ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
+          echo ${{steps.branch_checker.outputs.AWS_ACCESS_KEY_ID}}
     outputs:
       AWS_ACCESS_KEY_ID: ${{steps.branch_checker.outputs.AWS_ACCESS_KEY_ID}}
       AWS_SECRET_ACCESS_KEY: ${{steps.branch_checker.outputs.AWS_SECRET_ACCESS_KEY}}
