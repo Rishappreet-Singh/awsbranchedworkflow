@@ -1,0 +1,9 @@
+{
+    "Runtime": "python3.9",
+    "Role": "arn:aws:iam::479026564651:role/iam_for_lambda",
+    "Handler": "lambda_handler",
+    "Description": "from github",
+    "Timeout": 4,
+    "MemorySize": 132,
+    "PackageType": "Zip"
+}
