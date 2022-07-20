@@ -23,15 +23,11 @@ jobs:
         id: branch_checker
         run: |
           if [ "${{ github.ref }}" = "refs/heads/production_branch" ]; then
-            echo "::set-output name=AWS_ACCESS_KEY_ID::Hello_production_access_key"
-            echo "::set-output name=AWS_SECRET_ACCESS_KEY::Hello_production_secret_key"
-            #echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.AWS_ACCESS_KEY_ID}}"
-            #echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.AWS_SECRET_ACCESS_KEY}}"
+            echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.AWS_ACCESS_KEY_ID}}"
+            echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.AWS_SECRET_ACCESS_KEY}}"
           else
-            echo "::set-output name=AWS_ACCESS_KEY_ID::Hello_dev_access_key"
-            echo "::set-output name=AWS_SECRET_ACCESS_KEY::Hello_dev_secret_key"
-            #echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.AWS_ACCESS_KEY_ID}}"
-            #echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.AWS_SECRET_ACCESS_KEY}}"
+            echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.AWS_ACCESS_KEY_ID}}"
+            echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.AWS_SECRET_ACCESS_KEY}}"
           fi         
         
     outputs:
@@ -47,20 +43,12 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{needs.Enviro.outputs.AWS_ACCESS_KEY_ID}}
       AWS_SECRET_ACCESS_KEY: ${{needs.Enviro.outputs.AWS_SECRET_ACCESS_KEY}}
       AWS_REGION: "ap-southeast-1"
-#       AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY }}
-#       AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
     
     defaults:
       run:
         shell: bash
 
     steps:
-#     - name: program
-#       if: github.ref == 'refs/heads/dev_branch'
-#       env:
-#         AWS_ACCESS_KEY_ID: 'Hello_dev_access_key'
-#         AWS_SECRET_ACCESS_KEY: 'Hello_dev_secret_key'
-#       run: echo "dev"
     
     - name: Checkout
       uses: actions/checkout@v3
@@ -69,11 +57,3 @@ jobs:
       run: |
         echo $AWS_ACCESS_KEY_ID
         echo $AWS_SECRET_ACCESS_KEY
-#     - name: Terraform Init
-#       run: terraform init
-
-#     - name: Terraform Plan
-#       run: terraform plan -input=false
-
-#     - name: Terraform Apply
-#       run: terraform apply -auto-approve -input=false
