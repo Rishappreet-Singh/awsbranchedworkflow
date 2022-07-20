@@ -45,7 +45,9 @@ jobs:
 
     steps:    
      - name: aws command
-       run: aws lambda create-function --function-name ${{github.event.inputs.func_name}} --cli-input-json file://.default/conf.json --zip-file fileb://lambda_function.zip
-        
+       run: |
+        ls -al
+        aws lambda create-function --function-name ${{github.event.inputs.func_name}} --cli-input-json file://.default/conf.json --zip-file fileb://lambda_function.zip
+       continue-on-error: true 
         
       
