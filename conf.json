@@ -1,0 +1,6 @@
+{
+    "Description": "from github",
+    "Timeout": 900,
+    "MemorySize": 64,
+    "Publish": true,
+}
