@@ -1,0 +1,53 @@
+name: 'Function runner'
+
+on:
+  workflow_dispatch:
+    inputs: 
+      func_name:
+        description: 'Input function name'
+        default: 'none'
+        required: true        
+  
+jobs:
+  Enviro: 
+    name: 'Environement variable'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: checking branch
+        id: branch_checker
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/production_branch" ]; then
+            echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.PRODUCTION_AWS_ACCESS_KEY_ID}}"
+            echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY}}"
+          else
+            echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.DEV_AWS_ACCESS_KEY_ID}}"
+            echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.DEV_AWS_SECRET_ACCESS_KEY}}"
+          fi         
+        
+    outputs:
+      AWS_ACCESS_KEY_ID: ${{steps.branch_checker.outputs.AWS_ACCESS_KEY_ID}}
+      AWS_SECRET_ACCESS_KEY: ${{steps.branch_checker.outputs.AWS_SECRET_ACCESS_KEY}}
+    
+  Creating_resources:
+    name: 'resources'
+    runs-on: ubuntu-latest
+    environment: production
+    needs: [Enviro]
+    env: 
+      AWS_ACCESS_KEY_ID: ${{needs.Enviro.outputs.AWS_ACCESS_KEY_ID}}
+      AWS_SECRET_ACCESS_KEY: ${{needs.Enviro.outputs.AWS_SECRET_ACCESS_KEY}}
+      AWS_REGION: "ap-southeast-1"
+  
+    defaults:
+      run:
+        shell: bash
+
+    steps:    
+     - name: aws command
+       run: aws lambda create-function --function-name ${{github.event.inputs.func_name}} \
+         --cli-input-json file://.default/conf.json \
+         --zip-file fileb://.default/lambda_function.zip
+        
+        
+      
