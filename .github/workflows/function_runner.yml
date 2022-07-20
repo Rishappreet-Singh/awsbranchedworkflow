@@ -19,9 +19,7 @@ jobs:
         run: |
           if [ "${{ github.ref }}" = "refs/heads/production_branch" ]; then
             echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.PRODUCTION_AWS_ACCESS_KEY_ID}}"
-            #echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY}}"
-            #echo "::set-output name=AWS_ACCESS_KEY_ID::Hello"
-            echo "::set-output name=AWS_SECRET_ACCESS_KEY::World"
+            echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY}}"
           else
             echo "::set-output name=AWS_ACCESS_KEY_ID::${{secrets.DEV_AWS_ACCESS_KEY_ID}}"
             echo "::set-output name=AWS_SECRET_ACCESS_KEY::${{secrets.DEV_AWS_SECRET_ACCESS_KEY}}"
