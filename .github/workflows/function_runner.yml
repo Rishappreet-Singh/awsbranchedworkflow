@@ -30,34 +30,34 @@ jobs:
         run: |
           echo ${{ secrets.PRODUCTION_AWS_ACCESS_KEY_ID }}
           echo ${{steps.branch_checker.outputs.AWS_ACCESS_KEY_ID}}
-    outputs:
-      AWS_ACCESS_KEY_ID_part: ${{steps.branch_checker.outputs.AWS_ACCESS_KEY_ID}}
-      AWS_SECRET_ACCESS_KEY_part: ${{steps.branch_checker.outputs.AWS_SECRET_ACCESS_KEY}}
+#     outputs:
+#       AWS_ACCESS_KEY_ID_part: ${{steps.branch_checker.outputs.AWS_ACCESS_KEY_ID}}.AWS_ACCESS_KEY_ID}}
+#       AWS_SECRET_ACCESS_KEY_part: ${{steps.branch_checker.outputs.AWS_SECRET_ACCESS_KEY}}
     
-  Creating_resources:
-    name: 'resources'
-    runs-on: ubuntu-latest
-    environment: production
-    needs: [Enviro]
-    env: 
-      AWS_ACCESS_KEY_ID: ${{needs.Enviro.outputs.AWS_ACCESS_KEY_ID_part}}
-      AWS_SECRET_ACCESS_KEY: ${{needs.Enviro.outputs.AWS_SECRET_ACCESS_KEY_part}}
-      AWS_REGION: "ap-southeast-1"
+#   Creating_resources:
+#     name: 'resources'
+#     runs-on: ubuntu-latest
+#     environment: production
+#     needs: [Enviro]
+#     env: 
+#       AWS_ACCESS_KEY_ID: ${{needs.Enviro.outputs.AWS_ACCESS_KEY_ID_part}}
+#       AWS_SECRET_ACCESS_KEY: ${{needs.Enviro.outputs.AWS_SECRET_ACCESS_KEY_part}}
+#       AWS_REGION: "ap-southeast-1"
   
-    defaults:
-      run:
-        shell: bash
+#     defaults:
+#       run:
+#         shell: bash
     
-    steps:    
-     - name: Checkout
-       uses: actions/checkout@v3
-     - name: echo
-       run: |
-        echo $AWS_ACCESS_KEY_ID 
-        echo $AWS_SECRET_ACCESS_KEY
-        echo ${{needs.Enviro.outputs.AWS_ACCESS_KEY_ID_part}}
-     - name: aws command
-       run: |
-         aws lambda create-function --function-name ${{github.event.inputs.func_name}} \
-         --cli-input-json file://.default/conf.json \
-         --zip-file fileb://.default/lambda_function.zip
+#     steps:    
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Login
+        run: |
+          aws configure set aws_access_key_id ${{steps.branch_checker.outputs.AWS_ACCESS_KEY_ID}}
+          aws configure set aws_secret_access_key ${{steps.branch_checker.outputs.AWS_SECRET_ACCESS_KEY}}
+          aws configure set region "ap-southeast-1"
+      - name: aws command
+        run: |
+          aws lambda create-function --function-name ${{github.event.inputs.func_name}} \
+          --cli-input-json file://.default/conf.json \
+          --zip-file fileb://.default/lambda_function.zip
