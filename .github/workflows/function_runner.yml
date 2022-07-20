@@ -46,9 +46,12 @@ jobs:
     steps:    
      - name: Checkout
        uses: actions/checkout@v3
-       
-     - name: aws command
+     - name: echo
        run: |
-         aws lambda create-function --function-name ${{github.event.inputs.func_name}} \
-         --cli-input-json file://.default/conf.json \
-         --zip-file fileb://.default/lambda_function.zip
+        echo $AWS_ACCESS_KEY_ID 
+        echo $AWS_SECRET_ACCESS_KEY
+#      - name: aws command
+#        run: |
+#          aws lambda create-function --function-name ${{github.event.inputs.func_name}} \
+#          --cli-input-json file://.default/conf.json \
+#          --zip-file fileb://.default/lambda_function.zip
